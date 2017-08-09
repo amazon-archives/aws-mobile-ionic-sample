@@ -1,0 +1,17 @@
+page-tasks {
+  // font-size: 50%;
+
+  ion-note {
+    // font-size: 12px;
+    // align-self: flex-start;
+    // margin-top: 14px;
+  }
+
+  .danger-text {
+    color: color($colors, danger)
+  }
+
+  .ok-text {
+    color: color($colors, primary)
+  }
+}

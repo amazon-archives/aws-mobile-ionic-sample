@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-navbar color="darkbar">
+    <ion-title>Dashboard</ion-title>
+    <ion-buttons start>
+      <button ion-button icon-only clear (click)="openModal()"  [color]="userColor">
+        <ion-icon name="person"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class='content-home'>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-card>
+    <ion-card-header class='card-title'>
+      Remaining Tasks Per Project
+    </ion-card-header>
+
+    <ion-card-content no-padding>
+      <canvas *ngIf="projectChartLabels" height="150px" baseChart
+        [data]="projectChartData"
+        [legend]="projectChartLegend"
+        [labels]="projectChartLabels"
+        [chartType]="projectChartType"></canvas>
+    </ion-card-content>
+
+    <ion-row no-padding class='card-stats'>
+      <ion-col text-left>
+        <button small ion-button icon-left clear color="secondary">
+          <ion-icon name="folder"></ion-icon>
+          {{projectChartLabels?.length}}
+        </button>
+      </ion-col>
+      <ion-col text-right>
+        <button small ion-button icon-left clear color="secondary">
+          <ion-icon name="paper"></ion-icon>
+          {{remainingTasks}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+
+  <ion-card>
+    <ion-card-header class='card-title'>
+      Burndown Chart
+    </ion-card-header>
+
+    <ion-card-content no-padding>
+      <canvas *ngIf="lineChartData" baseChart height="180px"
+        [datasets]="lineChartData"
+        [labels]="lineChartLabels"
+        [options]="lineChartOptions"
+        [legend]="lineChartLegend"
+        [chartType]="lineChartType"></canvas>
+    </ion-card-content>
+
+
+    <ion-row no-padding class='card-stats'>
+    </ion-row>
+  </ion-card>
+
+</ion-content>

@@ -1,0 +1,15 @@
+{
+  "name": "bootstrap",
+  "version": "1.0.0",
+  "description": "bootstraper",
+  "main": "bootstrap.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.4.1",
+    "aws-sdk": "^2.62.0",
+    "chance": "^1.0.9",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1"
+  }
+}

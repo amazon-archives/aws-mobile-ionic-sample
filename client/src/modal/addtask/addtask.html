@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar color="darkbar">
+    <ion-buttons start>
+      <button ion-button icon-only (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>New Task</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <div>
+    <div class="container">
+      <form (ngSubmit)="addTask()" #taskForm="ngForm">
+
+        <ion-card *ngIf="message" color='secondary'>
+          <ion-card-content>
+            {{message}}
+          </ion-card-content>
+        </ion-card>
+
+        <ion-list inset>
+          <ion-item>
+            <ion-label fixed>Name</ion-label>
+            <ion-input type="text" name="name"  [(ngModel)]="task.name" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label fixed>Project</ion-label>
+            <ion-input type="text" name="project"  [(ngModel)]="task.project"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label fixed>Due</ion-label>
+            <ion-datetime displayFormat="MMM DD YYYY" [(ngModel)]="task.due" name="due"></ion-datetime>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>Description</ion-label>
+            <ion-textarea name="description" [(ngModel)]="task.description" rows="10"></ion-textarea>
+          </ion-item>
+
+
+        </ion-list>
+        <button ion-button full type="submit" [disabled]="!taskForm.form.valid">Add Task</button>
+      </form>
+    </div>
+  </div>
+
+</ion-content>

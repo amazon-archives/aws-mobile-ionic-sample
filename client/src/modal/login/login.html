@@ -1,0 +1,107 @@
+<ion-header>
+  <ion-toolbar color="darkbar">
+    <ion-buttons start>
+      <button ion-button icon-only (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-segment [(ngModel)]="page" (ionChange)="reset()">
+      <ion-segment-button value="login">
+        Sign In
+      </ion-segment-button>
+      <ion-segment-button value="register">
+        Register
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <div [ngSwitch]="page">
+    <div class="container" *ngSwitchCase="'login'">
+      <form (ngSubmit)="signin()" #signinForm="ngForm">
+
+        <ion-card *ngIf="message" color='secondary'>
+          <ion-card-content>
+            {{message}}
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card *ngIf="error" color='danger'>
+          <ion-card-content>
+            {{error}}
+          </ion-card-content>
+        </ion-card>
+
+        <ion-list inset>
+          <ion-item>
+            <ion-label fixed>Username</ion-label>
+            <ion-input type="text" name="username" required [(ngModel)]="credentials.username" #username="ngModel"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label fixed>Password</ion-label>
+            <ion-input type="password" name="password" required [(ngModel)]="credentials.password" #password="ngModel"></ion-input>
+          </ion-item>
+        </ion-list>
+        <button ion-button full type="submit" [disabled]="!signinForm.form.valid">Sign In</button>
+      </form>
+      <button ion-button small clear (click)="showConfirmation()">Or confirm registration</button>
+    </div>
+
+    <div class="container" *ngSwitchCase="'register'">
+      <form (ngSubmit)="register()" #registerForm="ngForm">
+
+        <ion-card *ngIf="error" color='danger'>
+          <ion-card-content>
+            {{error}}
+          </ion-card-content>
+        </ion-card>
+
+        <ion-list inset>
+          <ion-item>
+            <ion-label fixed>Username</ion-label>
+            <ion-input type="text" name="username" required [(ngModel)]="credentials.username" #username="ngModel"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label fixed>Email</ion-label>
+            <ion-input type="email" name="email" required [(ngModel)]="credentials.email" #email="ngModel"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label fixed>Password</ion-label>
+            <ion-input type="password" name="password" required [(ngModel)]="credentials.password" #password="ngModel"></ion-input>
+          </ion-item>
+        </ion-list>
+        <button ion-button full type="submit" [disabled]="!registerForm.form.valid">Register</button>
+      </form>
+    </div>
+
+    <div class="container" *ngSwitchCase="'confirm'">
+      <form (ngSubmit)="confirm()" #confirmationForm="ngForm">
+        <h3> Please confirm registration </h3>
+
+        <ion-card *ngIf="error" color='danger'>
+          <ion-card-content>
+            {{error}}
+          </ion-card-content>
+        </ion-card>
+
+        <ion-list inset>
+          <ion-item>
+            <ion-label fixed>Username</ion-label>
+            <ion-input type="text" name="username" required [(ngModel)]="credentials.username" #username="ngModel"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label fixed>Code</ion-label>
+            <ion-input type="text" name="confcode" required [(ngModel)]="credentials.confcode" #username="ngModel"></ion-input>
+          </ion-item>
+        </ion-list>
+        <button ion-button full type="submit" [disabled]="!confirmationForm.form.valid">Confirm</button>
+      </form>
+    </div>
+  </div>
+
+</ion-content>

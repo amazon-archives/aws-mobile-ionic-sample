@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-navbar color="darkbar">
+    <ion-title>
+      My Tasks
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)" [enabled]="auth.isUserSignedIn()">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card *ngIf="!auth.isUserSignedIn()" color="light">
+    <ion-card-content>
+      Sign In to see your tasks
+    </ion-card-content>
+  </ion-card>
+
+  <div *ngIf="auth.isUserSignedIn()">
+    <div *ngIf="(size | async) === 0" color="light">
+      <h1 text-center class="xxl soft"><ion-icon name="archive"></ion-icon></h1>
+      <h3 text-center class="soft"> You do not have any tasks </h3>
+    </div>
+
+    <div *ngIf="(size | async) > 0">
+      <ion-list> 
+        <ion-list-header class="danger-text">
+          Todo
+        </ion-list-header>
+        <ng-container *ngFor="let task of taskStore.tasks | async; let idx = index" >
+          <ion-item-sliding *ngIf="task.completed === false">
+            <ion-item>
+              <h3>{{task.name}} - <b>{{task.project}}</b></h3>
+              <p><i>{{task.due | fromNow}}</i> - {{task.description}}</p>
+            </ion-item>
+            <ion-item-options side="right">
+              <button ion-button icon-only padding-horizontal color="danger" (click)="deleteTask(idx)">
+                <ion-icon name="trash"></ion-icon>
+              </button>
+            </ion-item-options>
+            <ion-item-options side="left">
+              <button ion-button icon-only padding-horizontal color="secondary" (click)="completeTask(idx)">
+                <ion-icon name="checkmark"></ion-icon>
+              </button>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ng-container>
+      </ion-list>
+
+      <ion-list> 
+        <ion-list-header class="ok-text">
+          Completed
+        </ion-list-header>
+        <ng-container *ngFor="let task of taskStore.tasks | async; let idx = index" >
+          <ion-item-sliding *ngIf="task.completed === true">
+            <ion-item>
+              <h3>{{task.name}} - <b>{{task.project}}</b></h3>
+              <p><i>{{task.due | fromNow}}</i> - {{task.description}}</p>
+            </ion-item>
+            <ion-item-options side="right">
+              <button ion-button icon-only padding-horizontal color="danger" (click)="deleteTask(idx)">
+                <ion-icon name="trash"></ion-icon>
+              </button>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ng-container>
+      </ion-list>
+    </div>
+
+  </div>
+
+    <ion-fab right bottom *ngIf="auth.isUserSignedIn()">
+      <button ion-fab color="secondary" (click)="openModal()"><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
+</ion-content>
