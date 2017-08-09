@@ -39,7 +39,7 @@ First clone this repo: `git clone https://github.com/awslabs/aws-mobile-ionic-sa
 
 1. Set up your AWS resources using AWS Mobile Hub by clicking the button below:
 
-    [![Deploy to AWS Mobile Hub](https://s3.amazonaws.com/deploytomh/button-deploy-aws-mh.png)](https://console.aws.amazon.com/mobilehub/home?#/?config=https://github.com/awslabs/aws-mobile-ionic-sample/raw/master/backend/import_mobilehub/ionic-sample-app.zip)
+    [![Deploy to AWS Mobile Hub](https://s3.amazonaws.com/deploytomh/button-deploy-aws-mh.png)](https://console.aws.amazon.com/mobilehub/home?#/?config=https://github.com/awslabs/aws-mobile-ionic-sample/blob/master/backend/import_mobilehub/ionic-sample-app.zip)
 
 1. Update the preselected name of your project if necessary and take note of the region in which your resources are created in. Press **Import project**.
 
