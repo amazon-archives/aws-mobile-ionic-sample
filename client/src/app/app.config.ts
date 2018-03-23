@@ -9,7 +9,7 @@ declare const aws_cloud_logic_custom
 @Injectable()
 export class AwsConfig {
   public load () {
-    let aws_cloud_logic_custom_obj = JSON.parse(aws_cloud_logic_custom)
+    let aws_cloud_logic_custom_obj = aws_cloud_logic_custom
     return {
       'region': aws_cognito_region, // region you are deploying (all lower caps, e.g: us-east-1)
       'userPoolId': aws_user_pools_id, // your user pool ID
