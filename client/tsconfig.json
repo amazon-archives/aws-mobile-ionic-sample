@@ -4,6 +4,8 @@
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "typeRoots": [ "node_modules/@types" ],
+    "types": [ "node" ],
     "lib": [
       "dom",
       "es2015"

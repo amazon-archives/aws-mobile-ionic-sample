@@ -184,4 +184,14 @@ export class AuthService {
       } catch (e) { reject(e) }
     })
   }
+
+  facebookSignin(token) : Promise<CognitoUser>{
+    this.setCredentials(new AWS.CognitoIdentityCredentials({
+      IdentityPoolId : this.config.get('userPoolId'),
+      Logins : {
+        'graph.facebook.com': token
+      }
+    }));
+    return this.signin({Username: '', Password: ''});
+  }
 }

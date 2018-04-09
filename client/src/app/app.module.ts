@@ -24,6 +24,8 @@ import { Sigv4Http, Sigv4HttpProvider } from './sigv4.service'
 import { ChartsModule } from 'ng2-charts'
 import { momentFromNowPipe } from './momentFromNow.pipe'
 
+import { Facebook } from '@ionic-native/facebook';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -59,7 +61,8 @@ import { momentFromNowPipe } from './momentFromNow.pipe'
     AuthService, AuthServiceProvider,
     ProjectStore, ProjectStoreProvider,
     TaskStore, TaskStoreProvider,
-    Sigv4Http, Sigv4HttpProvider
+    Sigv4Http, Sigv4HttpProvider,
+    Facebook
   ]
 })
 export class AppModule {}

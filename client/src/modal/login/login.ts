@@ -1,11 +1,16 @@
 import { Component } from '@angular/core'
-import { NavController, NavParams, ViewController } from 'ionic-angular'
+import { NavController, NavParams, ViewController, Platform } from 'ionic-angular'
 import { AuthService } from '../../app/auth.service'
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+
+
+declare var FB :any;
 
 @Component({
   selector: 'modal-login',
   templateUrl: 'login.html'
 })
+
 export class LoginModal {
 
   page: string = 'login'
@@ -13,17 +18,34 @@ export class LoginModal {
   message: string
   error: string
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public auth: AuthService) {}
+  constructor(public navCtrl: NavController, 
+    public navParams: NavParams, 
+    public viewCtrl: ViewController, 
+    public auth: AuthService,
+    private facebook : Facebook,
+    private platform : Platform) {}
 
   ionViewDidLoad() { }
 
   signin () {
-    this.auth.signin(this.credentials).then((user) => {
-      this.dismiss()
-    }).catch((err) => {
-      console.log('error signing in', err)
-      this.setError(err.message)
-    })
+    if(this.platform.is('cordova')){
+          this.facebook.login(['email', 'public_profile']).then((response: FacebookLoginResponse) => {
+            console.log(response);
+            this.auth.facebookSignin(response.authResponse.accessToken).then((user) => {
+               this.dismiss()
+            }).catch((err) => {
+               console.log('error signing in', err)
+               this.setError(err.message)
+            });
+    });
+    }else{
+           // this.auth.signin(this.credentials).then((user) => {
+    //   this.dismiss()
+    // }).catch((err) => {
+    //   console.log('error signing in', err)
+    //   this.setError(err.message)
+    // });
+    }
   }
 
   register () {
