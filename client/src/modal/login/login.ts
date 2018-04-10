@@ -2,6 +2,7 @@ import { Component } from '@angular/core'
 import { NavController, NavParams, ViewController, Platform } from 'ionic-angular'
 import { AuthService } from '../../app/auth.service'
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+import {Storage} from '@ionic/storage';
 
 
 declare var FB :any;
@@ -23,20 +24,38 @@ export class LoginModal {
     public viewCtrl: ViewController, 
     public auth: AuthService,
     private facebook : Facebook,
-    private platform : Platform) {}
+    private platform : Platform,
+    private storage : Storage) {}
 
-  ionViewDidLoad() { }
+  ionViewDidLoad() {
+   }
 
   signin () {
     if(this.platform.is('cordova')){
-          this.facebook.login(['email', 'public_profile']).then((response: FacebookLoginResponse) => {
-            console.log(response);
-            this.auth.facebookSignin(response.authResponse.accessToken).then((user) => {
-               this.dismiss()
-            }).catch((err) => {
-               console.log('error signing in', err)
-               this.setError(err.message)
+          this.facebook.getLoginStatus().then((status)=>{
+          if( status !== 'connected'){
+              this.tryLoginWithStoragedToken().then((user) => {
+                this.dismiss()
+              }).catch(() =>{
+                this.facebook.login(['email', 'public_profile']).then((response: FacebookLoginResponse) => {
+                  this.storage.set('token',{'token' : response.authResponse.accessToken,
+                   'expiresIn' : response.authResponse.expiresIn});
+                  this.auth.facebookSignin(response.authResponse.accessToken).then((user) => {
+                     this.dismiss()
+                  }).catch((err) => {
+                     console.log('error signing in', err)
+                     this.setError(err.message)
+                  });
+              });
             });
+          }else{
+            this.tryLoginWithStoragedToken().then((user) => {
+                   this.dismiss()
+                }).catch((err) => {
+                   console.log('error signing in', err)
+                   this.setError(err.message)
+                }); 
+          }
     });
     }else{
            // this.auth.signin(this.credentials).then((user) => {
@@ -46,6 +65,22 @@ export class LoginModal {
     //   this.setError(err.message)
     // });
     }
+  }
+
+  private tryLoginWithStoragedToken(){
+    var _this = this;
+    return new Promise(function(resolve,reject){
+      _this.storage.get('token')
+      .then((token) => {
+        _this.auth.facebookSignin(token).then((user) => {
+                   resolve(user);
+                }).catch((err) => {
+                   reject(err);
+                }); 
+      }).catch((error) => {
+        reject(error);
+      })
+    });
   }
 
   register () {

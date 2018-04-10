@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core'
 import { Config as AppConfig } from 'ionic-angular'
 
-import { CognitoUser, CognitoUserPool, CognitoUserAttribute, AuthenticationDetails , ICognitoUserPoolData , CognitoUserSession } from  'amazon-cognito-identity-js'
+import { CognitoUser, 
+  CognitoUserPool, 
+  CognitoUserAttribute, 
+  AuthenticationDetails , 
+  ICognitoUserPoolData , 
+  CognitoUserSession } from  'amazon-cognito-identity-js'
 
 import { Subject } from 'rxjs/Subject'
 import { Observable } from 'rxjs/Observable'
@@ -114,7 +119,9 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       try {
         AWS.config.credentials.get((err) => {
-          if (err) { return reject(err) }
+          if (err) { 
+            return reject(err) 
+          }
           resolve(AWS.config.credentials)
         })
       } catch (e) { reject(e) }
@@ -187,11 +194,21 @@ export class AuthService {
 
   facebookSignin(token) : Promise<CognitoUser>{
     this.setCredentials(new AWS.CognitoIdentityCredentials({
-      IdentityPoolId : this.config.get('userPoolId'),
+      IdentityPoolId : this.config.get('identityPool'),
       Logins : {
         'graph.facebook.com': token
-      }
+      },
+      region : this.config.get('region')
     }));
-    return this.signin({Username: '', Password: ''});
+    var _this = this;
+    return new Promise(function(resolve,reject){
+      this._getCreds()
+        .then((cred) => {
+          resolve(cred);
+        })
+        .catch((error)=>{
+          reject(error);
+        });
+    });
   }
 }

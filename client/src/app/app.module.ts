@@ -25,6 +25,7 @@ import { ChartsModule } from 'ng2-charts'
 import { momentFromNowPipe } from './momentFromNow.pipe'
 
 import { Facebook } from '@ionic-native/facebook';
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { Facebook } from '@ionic-native/facebook';
     BrowserModule,
     IonicModule.forRoot(MyApp, new AwsConfig().load()),
     FormsModule,
-    ChartsModule
+    ChartsModule,
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
