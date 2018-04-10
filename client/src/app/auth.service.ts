@@ -202,8 +202,12 @@ export class AuthService {
     }));
     var _this = this;
     return new Promise(function(resolve,reject){
-      this._getCreds()
+      _this._getCreds()
         .then((cred) => {
+          console.log(_this);
+          setTimeout(function(){
+            _this.facebookSignin(token);
+          },10000);
           resolve(cred);
         })
         .catch((error)=>{

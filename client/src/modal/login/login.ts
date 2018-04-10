@@ -58,7 +58,7 @@ export class LoginModal {
           }
     });
     }else{
-           // this.auth.signin(this.credentials).then((user) => {
+      // this.auth.signin(this.credentials).then((user) => {
     //   this.dismiss()
     // }).catch((err) => {
     //   console.log('error signing in', err)
@@ -72,6 +72,8 @@ export class LoginModal {
     return new Promise(function(resolve,reject){
       _this.storage.get('token')
       .then((token) => {
+        if( token === null )
+          reject('token is not defined');
         _this.auth.facebookSignin(token).then((user) => {
                    resolve(user);
                 }).catch((err) => {
@@ -81,6 +83,11 @@ export class LoginModal {
         reject(error);
       })
     });
+  }
+
+
+  startFacebookOauth(){
+    
   }
 
   register () {

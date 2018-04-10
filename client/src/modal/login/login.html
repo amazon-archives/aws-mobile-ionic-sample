@@ -47,6 +47,7 @@
         </ion-list>
         <button ion-button full type="submit" [disabled]="!signinForm.form.valid">Sign In</button>
       </form>
+      <button ion-button small clear (click)="startFacebookOauth()">Or continue with Facebook</button>
       <button ion-button small clear (click)="showConfirmation()">Or confirm registration</button>
     </div>
 
