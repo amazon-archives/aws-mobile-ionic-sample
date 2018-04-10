@@ -72,7 +72,7 @@ export class AuthService {
   }
 
   private saveCreds (session, cognitoUser?): void {
-    this.session = session
+    this.session = session;
     if (cognitoUser) { this._cognitoUser = cognitoUser }
     this.setCredentials(this.buildCreds())
   }
@@ -192,27 +192,12 @@ export class AuthService {
     })
   }
 
-  facebookSignin(token) : Promise<CognitoUser>{
-    this.setCredentials(new AWS.CognitoIdentityCredentials({
-      IdentityPoolId : this.config.get('identityPool'),
-      Logins : {
-        'graph.facebook.com': token
-      },
-      region : this.config.get('region')
-    }));
-    var _this = this;
-    return new Promise(function(resolve,reject){
-      _this._getCreds()
-        .then((cred) => {
-          console.log(_this);
-          setTimeout(function(){
-            _this.facebookSignin(token);
-          },10000);
-          resolve(cred);
-        })
-        .catch((error)=>{
-          reject(error);
-        });
-    });
+  setFacebookSession(codes) {
+    var user = this.getNewCognitoUser({username : 'facebook user', });
+    var session = new CognitoUserSession({ 'IdToken' : codes.id_token,
+      'RefreshToken' : codes.refresh_token,
+      'AccessToken' : codes.access_token});
+    user.setSignInUserSession(session);
+    this.saveCreds(session, user);
   }
 }

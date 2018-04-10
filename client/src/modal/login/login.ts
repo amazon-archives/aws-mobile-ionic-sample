@@ -3,9 +3,12 @@ import { NavController, NavParams, ViewController, Platform } from 'ionic-angula
 import { AuthService } from '../../app/auth.service'
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 import {Storage} from '@ionic/storage';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 
 
 declare var FB :any;
+
 
 @Component({
   selector: 'modal-login',
@@ -18,6 +21,10 @@ export class LoginModal {
   credentials: Credentials = {}
   message: string
   error: string
+  facebook_login_error : boolean
+
+  COGNITO_POOL_URL : string  = 'https://ioniclogin.auth.eu-west-1.amazoncognito.com'
+  COGNITO_CLIENT_ID : string = '7no06cfnkftjbk3hpp1e9ti0rp'
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams, 
@@ -25,69 +32,57 @@ export class LoginModal {
     public auth: AuthService,
     private facebook : Facebook,
     private platform : Platform,
-    private storage : Storage) {}
+    private storage : Storage,
+    private browser : InAppBrowser,
+    private http : Http) {}
 
   ionViewDidLoad() {
    }
 
   signin () {
-    if(this.platform.is('cordova')){
-          this.facebook.getLoginStatus().then((status)=>{
-          if( status !== 'connected'){
-              this.tryLoginWithStoragedToken().then((user) => {
-                this.dismiss()
-              }).catch(() =>{
-                this.facebook.login(['email', 'public_profile']).then((response: FacebookLoginResponse) => {
-                  this.storage.set('token',{'token' : response.authResponse.accessToken,
-                   'expiresIn' : response.authResponse.expiresIn});
-                  this.auth.facebookSignin(response.authResponse.accessToken).then((user) => {
-                     this.dismiss()
-                  }).catch((err) => {
-                     console.log('error signing in', err)
-                     this.setError(err.message)
-                  });
-              });
-            });
-          }else{
-            this.tryLoginWithStoragedToken().then((user) => {
-                   this.dismiss()
-                }).catch((err) => {
-                   console.log('error signing in', err)
-                   this.setError(err.message)
-                }); 
-          }
-    });
-    }else{
-      // this.auth.signin(this.credentials).then((user) => {
-    //   this.dismiss()
-    // }).catch((err) => {
-    //   console.log('error signing in', err)
-    //   this.setError(err.message)
-    // });
-    }
-  }
-
-  private tryLoginWithStoragedToken(){
-    var _this = this;
-    return new Promise(function(resolve,reject){
-      _this.storage.get('token')
-      .then((token) => {
-        if( token === null )
-          reject('token is not defined');
-        _this.auth.facebookSignin(token).then((user) => {
-                   resolve(user);
-                }).catch((err) => {
-                   reject(err);
-                }); 
-      }).catch((error) => {
-        reject(error);
-      })
+      this.auth.signin(this.credentials).then((user) => {
+      this.dismiss()
+    }).catch((err) => {
+      console.log('error signing in', err)
+      this.setError(err.message)
     });
   }
-
 
   startFacebookOauth(){
-    
+    var login_page = this.browser.create( this.COGNITO_POOL_URL + '/login?response_type=code&client_id=' + this.COGNITO_CLIENT_ID + '&redirect_uri=http://localhost:8100/');
+    login_page.on('loadstop').subscribe(event => {
+      if(event.url.startsWith('http://localhost:8100')){
+        var auth_code = event.url.split('code=')[1];
+        login_page.close();
+        if(auth_code == null)
+          this.facebook_login_error = true;
+        else
+          this.oauthRequestToken(auth_code);
+    });
+  }
+
+  oauthRequestToken(authorization_code){
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded' );
+    let options = new RequestOptions({ headers: headers });
+    let body = new URLSearchParams();
+    body.set('grant_type','authorization_code');
+    body.set('client_id',this.COGNITO_CLIENT_ID);
+    body.set('redirect_uri','http://localhost:8100/' );
+    body.set('code',authorization_code);
+    let postParams = {
+      grant_type: 'authorization_code',
+      client_id: this.COGNITO_CLIENT_ID,
+      redirect_uri: 'http://localhost:8100/',
+      code : authorization_code
+    }
+    //postParams = [{"key":"grant_type","value":"authorization_code"},{"key":"client_id","value":this.COGNITO_CPLIENT_ID},{"key":"redirect_uri","value":"https://www.amazon.com"},{"key":"code","value":authorization_code}];
+    this.http.post(this.COGNITO_POOL_URL + "/oauth2/token", body.toString(), options)
+      .subscribe(data => {
+        this.auth.setFacebookSession(JSON.parse(data._body));
+       }, error => {
+        console.log(error);// Error getting the data
+      });
   }
 
   register () {

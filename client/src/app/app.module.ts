@@ -26,6 +26,7 @@ import { momentFromNowPipe } from './momentFromNow.pipe'
 
 import { Facebook } from '@ionic-native/facebook';
 import { IonicStorageModule } from '@ionic/storage';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,7 @@ import { IonicStorageModule } from '@ionic/storage';
     ProjectStore, ProjectStoreProvider,
     TaskStore, TaskStoreProvider,
     Sigv4Http, Sigv4HttpProvider,
-    Facebook
+    Facebook, InAppBrowser
   ]
 })
 export class AppModule {}
