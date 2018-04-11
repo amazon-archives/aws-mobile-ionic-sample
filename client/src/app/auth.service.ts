@@ -6,7 +6,10 @@ import { CognitoUser,
   CognitoUserAttribute, 
   AuthenticationDetails , 
   ICognitoUserPoolData , 
-  CognitoUserSession } from  'amazon-cognito-identity-js'
+  CognitoUserSession,
+  CognitoIdToken,
+  CognitoAccessToken,
+  CognitoRefreshToken} from  'amazon-cognito-identity-js'
 
 import { Subject } from 'rxjs/Subject'
 import { Observable } from 'rxjs/Observable'
@@ -32,9 +35,12 @@ export class AuthService {
   private _signoutSubject: Subject<string> = new Subject<string>()
   private _signinSubject: Subject<string> = new Subject<string>()
 
+  private appId = '7no06cfnkftjbk3hpp1e9ti0rp';
+  private userPoolId = 'eu-west-1_oRXrKiH7B'
+
   constructor(private config: AppConfig) {
     AWS.config.region = this.config.get('region')
-    this.poolData = { UserPoolId: this.config.get('userPoolId'), ClientId: this.config.get('appId') }
+    this.poolData = { UserPoolId: this.userPoolId, ClientId: this.appId }
     this.userPool = new CognitoUserPool(this.poolData)
     this.refreshOrResetCreds()
   }
@@ -194,9 +200,9 @@ export class AuthService {
 
   setFacebookSession(codes) {
     var user = this.getNewCognitoUser({username : 'facebook user', });
-    var session = new CognitoUserSession({ 'IdToken' : codes.id_token,
-      'RefreshToken' : codes.refresh_token,
-      'AccessToken' : codes.access_token});
+  var session = new CognitoUserSession({ 'IdToken' : new CognitoIdToken( { 'IdToken': codes.id_token}),
+      'RefreshToken' : new CognitoRefreshToken({'RefreshToken' : codes.refresh_token}),
+      'AccessToken' : new CognitoAccessToken({'AccessToken' : codes.access_token})});
     user.setSignInUserSession(session);
     this.saveCreds(session, user);
   }

@@ -84,10 +84,6 @@
     <plugin name="cordova-plugin-statusbar" spec="2.2.2" />
     <plugin name="cordova-plugin-device" spec="1.1.4" />
     <plugin name="cordova-plugin-splashscreen" spec="~4.0.1" />
-    <plugin name="cordova-plugin-facebook4" spec="^1.9.1">
-        <variable name="APP_ID" value="1916987681946176" />
-        <variable name="APP_NAME" value="aws.cognito.identity" />
-    </plugin>
     <engine name="android" spec="~7.0.0" />
     <plugin name="cordova-sqlite-storage" spec="^2.3.0" />
     <plugin name="cordova-plugin-inappbrowser" spec="^2.0.2" />

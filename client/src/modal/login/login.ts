@@ -52,12 +52,13 @@ export class LoginModal {
     var login_page = this.browser.create( this.COGNITO_POOL_URL + '/login?response_type=code&client_id=' + this.COGNITO_CLIENT_ID + '&redirect_uri=http://localhost:8100/');
     login_page.on('loadstop').subscribe(event => {
       if(event.url.startsWith('http://localhost:8100')){
-        var auth_code = event.url.split('code=')[1];
+        var auth_code = event.url.split('code=')[1].split('#')[0];
         login_page.close();
         if(auth_code == null)
           this.facebook_login_error = true;
         else
           this.oauthRequestToken(auth_code);
+    }
     });
   }
 
@@ -79,9 +80,20 @@ export class LoginModal {
     //postParams = [{"key":"grant_type","value":"authorization_code"},{"key":"client_id","value":this.COGNITO_CPLIENT_ID},{"key":"redirect_uri","value":"https://www.amazon.com"},{"key":"code","value":authorization_code}];
     this.http.post(this.COGNITO_POOL_URL + "/oauth2/token", body.toString(), options)
       .subscribe(data => {
-        this.auth.setFacebookSession(JSON.parse(data._body));
+        try{
+          this.auth.setFacebookSession(data.json());
+          this.dismiss();
+          var __thus= this;
+          setTimeout(function(){
+            __thus.auth.getCredentials().subscribe(result => {
+              console.log(result);
+            });
+          },60000);
+        }catch(error){
+          this.setError(error.toString());
+        }
        }, error => {
-        console.log(error);// Error getting the data
+        this.setError(error.text());
       });
   }
 

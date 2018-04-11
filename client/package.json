@@ -35,7 +35,6 @@
     "cordova-android": "7.0.0",
     "cordova-plugin-console": "^1.0.5",
     "cordova-plugin-device": "^1.1.4",
-    "cordova-plugin-facebook4": "^1.9.1",
     "cordova-plugin-inappbrowser": "^2.0.2",
     "cordova-plugin-splashscreen": "^4.0.3",
     "cordova-plugin-statusbar": "^2.2.2",
@@ -70,10 +69,6 @@
   "description": "",
   "cordova": {
     "plugins": {
-      "cordova-plugin-facebook4": {
-        "APP_ID": "1916987681946176",
-        "APP_NAME": "awc-cognito-identity"
-      },
       "ionic-plugin-keyboard": {},
       "cordova-plugin-whitelist": {},
       "cordova-plugin-console": {},
