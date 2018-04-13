@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { NavController, NavParams, ViewController, Platform } from 'ionic-angular'
 import { AuthService } from '../../app/auth.service'
-import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+import { EventsService } from '../../app/events.service'
 import {Storage} from '@ionic/storage';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
@@ -30,7 +30,7 @@ export class LoginModal {
     public navParams: NavParams, 
     public viewCtrl: ViewController, 
     public auth: AuthService,
-    private facebook : Facebook,
+    public events : EventsService,
     private platform : Platform,
     private storage : Storage,
     private browser : InAppBrowser,
@@ -82,13 +82,8 @@ export class LoginModal {
       .subscribe(data => {
         try{
           this.auth.setFacebookSession(data.json());
+          this.events.userLoggedId();
           this.dismiss();
-          var __thus= this;
-          setTimeout(function(){
-            __thus.auth.getCredentials().subscribe(result => {
-              console.log(result);
-            });
-          },60000);
         }catch(error){
           this.setError(error.toString());
         }

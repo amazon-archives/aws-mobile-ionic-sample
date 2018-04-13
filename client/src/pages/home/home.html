@@ -9,18 +9,19 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content class='content-home'>
+<ion-content class='content-home padding'>
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-card *ngIf="!auth.isUserSignedIn()" color="light">
     <ion-card-content>
-      Sign In to save credentials
+      Sign In to execute lambda
   </ion-card-content>
   </ion-card>
   <div *ngIf="auth.isUserSignedIn()">
     <div>
       <h1 text-center class="xxl soft">Welcome</h1>
+      <p>Your new session refresh will start at {{next_refresh}}</p>
       <button ion-button full color="primary" (click)="save()">
         SAVE
       </button>

@@ -36,10 +36,11 @@ export class AuthService {
   private _signinSubject: Subject<string> = new Subject<string>()
 
   private appId = '7no06cfnkftjbk3hpp1e9ti0rp';
-  private userPoolId = 'eu-west-1_oRXrKiH7B'
+  private userPoolId = 'eu-west-1_oRXrKiH7B';
+  private identityPoolId = 'eu-west-1:a3efcd32-25f8-4e05-a01d-769dc516890e';
 
   constructor(private config: AppConfig) {
-    AWS.config.region = this.config.get('region')
+    AWS.config.region = this.config.get('region');
     this.poolData = { UserPoolId: this.userPoolId, ClientId: this.appId }
     this.userPool = new CognitoUserPool(this.poolData)
     this.refreshOrResetCreds()
@@ -67,7 +68,7 @@ export class AuthService {
 
   private buildLogins (token) {
     let key = this.config.get('idpURL') + '/' + this.config.get('userPoolId')
-    let json = { IdentityPoolId: this.config.get('identityPool'), Logins: {} }
+    let json = { IdentityPoolId: this.identityPoolId, Logins: {} }
     json.Logins[key] = token
     return json
   }
@@ -107,7 +108,7 @@ export class AuthService {
     console.log('Resetting credentials for unauth access')
     AWS.config.region = this.config.get('region')
     this._cognitoUser = null
-    this.unauthCreds = this.unauthCreds || new AWS.CognitoIdentityCredentials({ IdentityPoolId: this.config.get('identityPool') })
+    this.unauthCreds = this.unauthCreds || new AWS.CognitoIdentityCredentials({ IdentityPoolId: this.identityPoolId })
     if (clearCache){ this.unauthCreds.clearCachedId() }
     this.setCredentials(this.unauthCreds)
   }

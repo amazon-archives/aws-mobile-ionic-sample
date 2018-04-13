@@ -8,7 +8,6 @@ import { FormsModule } from '@angular/forms'
 
 import { MyApp } from './app.component'
 
-import { TasksPage } from '../pages/tasks/tasks'
 import { HomePage } from '../pages/home/home'
 import { TabsPage } from '../pages/tabs/tabs'
 import { LoginModal } from '../modal/login/login'
@@ -17,26 +16,22 @@ import { AddTaskModal } from '../modal/addtask/addtask'
 
 import { AwsConfig } from './app.config'
 import { AuthService, AuthServiceProvider } from './auth.service'
-import { ProjectStore, ProjectStoreProvider } from './project.store'
-import { TaskStore, TaskStoreProvider } from './task.store'
+import { EventsService, EventsServiceProvider } from './events.service'
 import { Sigv4Http, Sigv4HttpProvider } from './sigv4.service'
 
-import { ChartsModule } from 'ng2-charts'
 import { momentFromNowPipe } from './momentFromNow.pipe'
 
-import { Facebook } from '@ionic-native/facebook';
 import { IonicStorageModule } from '@ionic/storage';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { AppEventsProvider } from '../providers/app-events/app-events';
 
 @NgModule({
   declarations: [
     MyApp,
-    TasksPage,
     HomePage,
     TabsPage,
     LoginModal,
     LogoutModal,
-    AddTaskModal,
     momentFromNowPipe
   ],
   imports: [
@@ -44,28 +39,25 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
     BrowserModule,
     IonicModule.forRoot(MyApp, new AwsConfig().load()),
     FormsModule,
-    ChartsModule,
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    TasksPage,
     HomePage,
     TabsPage,
     LoginModal,
-    LogoutModal,
-    AddTaskModal
+    LogoutModal
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthService, AuthServiceProvider,
-    ProjectStore, ProjectStoreProvider,
-    TaskStore, TaskStoreProvider,
+    EventsService, EventsServiceProvider,
     Sigv4Http, Sigv4HttpProvider,
-    Facebook, InAppBrowser
+    InAppBrowser,
+    AppEventsProvider
   ]
 })
 export class AppModule {}
