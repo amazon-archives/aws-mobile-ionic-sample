@@ -51,3 +51,8 @@ Clone this repository: `https://github.com/SimoneMSR/aws-mobile-ionic-facebook-a
 - rembember the `aws_domain_name` variable you set beforehand in the <a href="#configfile">config file</a>
 - set the Redirect URI as aws_domain_name`/oauth2/idpresponse`
 - enable access from Mobile
+
+## Build
+
+- yarn install
+- ionic build
