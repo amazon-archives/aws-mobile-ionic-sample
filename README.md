@@ -12,6 +12,7 @@ These <a href="https://github.com/aws-samples/aws-mobile-ionic-sample#prerequisi
 ## Instructions
 
 <p id="configfile">Assumptions:</p>
+
 In the following, consider the 'config file' to be the `client/src/assets/aws_config.js` file
 
 Clone this repository: `https://github.com/SimoneMSR/aws-mobile-ionic-facebook-auth-grant-flow`
