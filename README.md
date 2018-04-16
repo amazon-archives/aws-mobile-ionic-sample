@@ -3,6 +3,10 @@ This project is a fork of the <a href="https://github.com/aws-samples/aws-mobile
 
 Please, if you have suggestions, make a PR.
 
+<p align="center">
+  <img src="screenshot/login.jpg" width="350"/>
+</p>
+
 ## Prerequisites
 
 These <a href="https://github.com/aws-samples/aws-mobile-ionic-sample#prerequisites">prerequisites</a> plus:
