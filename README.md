@@ -35,10 +35,10 @@ Clone this repository: `https://github.com/SimoneMSR/aws-mobile-ionic-facebook-a
 1. flag the Allowed OAuth Flows  -> Authorization Code Grant
 1. flag the Allowed OAuth Scopes -> `email`, `openid`
 1. go to app integration -> domain name
-1. set the `aws_domain_name variable` to the domain name in the <a href="#configfile">config file</a>
+1. set the `aws_domain_name` variable to the domain name in the <a href="#configfile">config file</a>
 1. got to cognito-> manage federate identities -> your identity pool
 1. edit identity pool
-1. make the `aws_cognito_identity_pool_id variable` in the <a href="#configfile">config file</a>  to be you identity pool id
+1. make the `aws_cognito_identity_pool_id` variable in the <a href="#configfile">config file</a>  to be you identity pool id
 1. go to authentication providers -> facebook
 1. set the app id
 1. take note of the region of you Identity Pool and set accordingly the value of the variable `aws_cognito_region` in the <a href="#configfile">config file</a>
