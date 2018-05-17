@@ -3,6 +3,8 @@ This project is a fork of the <a href="https://github.com/aws-samples/aws-mobile
 
 Please, if you have suggestions, make a PR.
 
+![](https://user-images.githubusercontent.com/10962296/40169097-7e2993d4-59c5-11e8-8596-53224328ee64.jpg)
+
 <p align="center">
   <img src="screenshot/login.jpg" width="350"/>
 </p>
