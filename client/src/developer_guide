@@ -1,0 +1,3 @@
+facebook ionic native guide : https://ionicacademy.com/ionic-facebook-login/
+aws cognito third party provider: https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/loading-browser-credentials-cognito.html
+where is explained the difference between implicit flow and grant flow: https://forums.aws.amazon.com/thread.jspa?threadID=263745

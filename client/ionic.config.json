@@ -1,5 +1,9 @@
 {
   "name": "ionic-tasks",
   "app_id": "",
-  "type": "ionic-angular"
+  "type": "ionic-angular",
+  "defaultBrowser": "chrome",
+  "integrations": {
+    "cordova": {}
+  }
 }

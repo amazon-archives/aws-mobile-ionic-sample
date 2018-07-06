@@ -1,7 +1,15 @@
 import { Injectable } from '@angular/core'
 import { Config as AppConfig } from 'ionic-angular'
 
-import { CognitoUser, CognitoUserPool, CognitoUserAttribute, AuthenticationDetails , ICognitoUserPoolData , CognitoUserSession } from  'amazon-cognito-identity-js'
+import { CognitoUser, 
+  CognitoUserPool, 
+  CognitoUserAttribute, 
+  AuthenticationDetails , 
+  ICognitoUserPoolData , 
+  CognitoUserSession,
+  CognitoIdToken,
+  CognitoAccessToken,
+  CognitoRefreshToken} from  'amazon-cognito-identity-js'
 
 import { Subject } from 'rxjs/Subject'
 import { Observable } from 'rxjs/Observable'
@@ -27,9 +35,13 @@ export class AuthService {
   private _signoutSubject: Subject<string> = new Subject<string>()
   private _signinSubject: Subject<string> = new Subject<string>()
 
+  private appId = '7no06cfnkftjbk3hpp1e9ti0rp';
+  private userPoolId = 'eu-west-1_oRXrKiH7B';
+  private identityPoolId = 'eu-west-1:a3efcd32-25f8-4e05-a01d-769dc516890e';
+
   constructor(private config: AppConfig) {
-    AWS.config.region = this.config.get('region')
-    this.poolData = { UserPoolId: this.config.get('userPoolId'), ClientId: this.config.get('appId') }
+    AWS.config.region = this.config.get('region');
+    this.poolData = { UserPoolId: this.userPoolId, ClientId: this.appId }
     this.userPool = new CognitoUserPool(this.poolData)
     this.refreshOrResetCreds()
   }
@@ -56,7 +68,7 @@ export class AuthService {
 
   private buildLogins (token) {
     let key = this.config.get('idpURL') + '/' + this.config.get('userPoolId')
-    let json = { IdentityPoolId: this.config.get('identityPool'), Logins: {} }
+    let json = { IdentityPoolId: this.identityPoolId, Logins: {} }
     json.Logins[key] = token
     return json
   }
@@ -67,7 +79,7 @@ export class AuthService {
   }
 
   private saveCreds (session, cognitoUser?): void {
-    this.session = session
+    this.session = session;
     if (cognitoUser) { this._cognitoUser = cognitoUser }
     this.setCredentials(this.buildCreds())
   }
@@ -96,7 +108,7 @@ export class AuthService {
     console.log('Resetting credentials for unauth access')
     AWS.config.region = this.config.get('region')
     this._cognitoUser = null
-    this.unauthCreds = this.unauthCreds || new AWS.CognitoIdentityCredentials({ IdentityPoolId: this.config.get('identityPool') })
+    this.unauthCreds = this.unauthCreds || new AWS.CognitoIdentityCredentials({ IdentityPoolId: this.identityPoolId })
     if (clearCache){ this.unauthCreds.clearCachedId() }
     this.setCredentials(this.unauthCreds)
   }
@@ -114,7 +126,9 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       try {
         AWS.config.credentials.get((err) => {
-          if (err) { return reject(err) }
+          if (err) { 
+            return reject(err) 
+          }
           resolve(AWS.config.credentials)
         })
       } catch (e) { reject(e) }
@@ -183,5 +197,14 @@ export class AuthService {
         })
       } catch (e) { reject(e) }
     })
+  }
+
+  setFacebookSession(codes) {
+    var user = this.getNewCognitoUser({username : 'facebook user', });
+  var session = new CognitoUserSession({ 'IdToken' : new CognitoIdToken( { 'IdToken': codes.id_token}),
+      'RefreshToken' : new CognitoRefreshToken({'RefreshToken' : codes.refresh_token}),
+      'AccessToken' : new CognitoAccessToken({'AccessToken' : codes.access_token})});
+    user.setSignInUserSession(session);
+    this.saveCreds(session, user);
   }
 }
